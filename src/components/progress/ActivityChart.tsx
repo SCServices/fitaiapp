@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ActivityDay {
   date: string;
@@ -26,6 +27,7 @@ interface ActivityChartProps {
 const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
   const [viewMode, setViewMode] = useState<'count' | 'minutes' | 'intensity'>('count');
   const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const isMobile = useIsMobile();
   
   // Format data for the chart with additional metrics
   const chartData = activityData.map((day, index) => ({
@@ -74,7 +76,7 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <div className="flex items-center gap-2">
             <CardTitle className="text-lg">Weekly Activity</CardTitle>
             <TooltipProvider>
@@ -91,12 +93,12 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
               </UITooltip>
             </TooltipProvider>
           </div>
-          <div className="flex space-x-1">
+          <div className="flex space-x-1 overflow-x-auto max-w-full">
             <Button 
               variant={viewMode === 'count' ? "default" : "outline"} 
               size="sm" 
               onClick={() => setViewMode('count')}
-              className="h-7 text-xs"
+              className="h-7 text-xs whitespace-nowrap"
             >
               Workouts
             </Button>
@@ -104,7 +106,7 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
               variant={viewMode === 'minutes' ? "default" : "outline"} 
               size="sm" 
               onClick={() => setViewMode('minutes')}
-              className="h-7 text-xs"
+              className="h-7 text-xs whitespace-nowrap"
             >
               Minutes
             </Button>
@@ -112,7 +114,7 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
               variant={viewMode === 'intensity' ? "default" : "outline"} 
               size="sm" 
               onClick={() => setViewMode('intensity')}
-              className="h-7 text-xs"
+              className="h-7 text-xs whitespace-nowrap"
             >
               Intensity
             </Button>
@@ -132,8 +134,8 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart 
                 data={chartData} 
-                margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
-                barCategoryGap="20%"
+                margin={isMobile ? { top: 10, right: 5, left: 0, bottom: 20 } : { top: 10, right: 10, left: 10, bottom: 20 }}
+                barCategoryGap={isMobile ? "10%" : "20%"}
               >
                 <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.15} />
                 <XAxis 
@@ -141,16 +143,17 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
                   axisLine={false}
                   tickLine={false}
                   tickMargin={8}
-                  fontSize={12}
+                  fontSize={10}
+                  interval={0}
                 />
                 <YAxis 
                   axisLine={false}
                   tickLine={false}
                   tickCount={5}
                   fontSize={10}
-                  width={30}
+                  width={isMobile ? 25 : 30}
                   domain={[0, getMaxValue()]}
-                  label={{ 
+                  label={isMobile ? undefined : { 
                     value: getYAxisLabel(), 
                     angle: -90, 
                     position: 'insideLeft',
@@ -183,7 +186,7 @@ const ActivityChart: React.FC<ActivityChartProps> = ({ activityData }) => {
                   fill={getChartColor()}
                   radius={[4, 4, 0, 0]} 
                   name={viewMode}
-                  barSize={28}
+                  barSize={isMobile ? 20 : 28}
                   className="hover:opacity-80 transition-opacity cursor-pointer"
                   animationDuration={800}
                 />

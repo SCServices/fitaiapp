@@ -22,6 +22,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 import WorkoutFeedbackModal from './WorkoutFeedbackModal';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface WorkoutCardProps {
   workout: WorkoutType;
@@ -30,6 +31,7 @@ interface WorkoutCardProps {
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
   const navigate = useNavigate();
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const isMobile = useIsMobile();
   
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -91,10 +93,10 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
     <>
       <Card className="workout-card mb-4 animate-fade-in cursor-pointer" onClick={handleCardClick}>
         <CardHeader className="pb-2">
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start flex-wrap gap-2">
             <div>
               <CardTitle className="text-xl font-bold">{workout.name}</CardTitle>
-              <div className="flex gap-2 mt-1">
+              <div className="flex flex-wrap gap-2 mt-1">
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">{workout.category}</Badge>
                 <div className="flex items-center text-gray-600 text-sm">
                   <Clock className="h-3 w-3 mr-1" />
@@ -113,12 +115,12 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-gray-600 mb-3">{workout.description}</div>
+          <div className="text-gray-600 mb-3 text-sm sm:text-base">{workout.description}</div>
           <div className="space-y-2">
             {workout.exercises.slice(0, 3).map((exercise, index) => (
-              <div key={index} className="flex justify-between items-center p-2 rounded-md bg-gray-50">
-                <span className="font-medium">{exercise.name}</span>
-                <span className="text-gray-600">{exercise.sets} × {exercise.reps}</span>
+              <div key={index} className="flex justify-between items-center p-2 rounded-md bg-gray-50 text-sm">
+                <span className="font-medium truncate mr-2">{exercise.name}</span>
+                <span className="text-gray-600 whitespace-nowrap">{exercise.sets} × {exercise.reps}</span>
               </div>
             ))}
             {workout.exercises.length > 3 && (
@@ -128,25 +130,25 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
             )}
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between pt-2">
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={handleLike}>
+        <CardFooter className="flex justify-between pt-2 flex-wrap gap-2">
+          <div className="flex gap-1 sm:gap-2">
+            <Button variant="outline" size={isMobile ? "sm" : "sm"} onClick={handleLike} className="px-2 sm:px-3">
               <ThumbsUp className="h-4 w-4 mr-1" />
-              Like
+              <span className="hidden sm:inline">Like</span>
             </Button>
-            <Button variant="outline" size="sm" onClick={handleDislike}>
+            <Button variant="outline" size={isMobile ? "sm" : "sm"} onClick={handleDislike} className="px-2 sm:px-3">
               <ThumbsDown className="h-4 w-4 mr-1" />
-              Dislike
+              <span className="hidden sm:inline">Dislike</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={handleDetailedFeedback}>
-              <MessageSquare className="h-4 w-4 mr-1" />
+            <Button variant="ghost" size="sm" onClick={handleDetailedFeedback} className="px-2">
+              <MessageSquare className="h-4 w-4" />
             </Button>
           </div>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="sm" onClick={(e) => e.stopPropagation()}>
+              <Button variant="ghost" size="sm" onClick={(e) => e.stopPropagation()} className="px-2 sm:px-3">
                 <Share2 className="h-4 w-4 mr-1" />
-                Share
+                <span className="hidden sm:inline">Share</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-48" onClick={(e) => e.stopPropagation()}>

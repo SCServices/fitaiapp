@@ -91,12 +91,12 @@ const RecommendedWorkouts: React.FC = () => {
   return (
     <Card className="mb-6">
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-2">
           <CardTitle className="text-lg flex items-center">
             <Sparkles className="h-4 w-4 text-primary mr-2" />
             Recommended For You
           </CardTitle>
-          <Button variant="ghost" size="sm" onClick={generateRecommendations}>
+          <Button variant="ghost" size="sm" onClick={generateRecommendations} className="h-8">
             <RefreshCw className="h-4 w-4 mr-1" />
             Refresh
           </Button>

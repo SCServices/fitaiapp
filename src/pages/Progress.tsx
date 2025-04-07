@@ -24,7 +24,7 @@ const ProgressPage = () => {
           
           <ActivityChart activityData={mockActivityData} />
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-500">Workouts</CardTitle>
