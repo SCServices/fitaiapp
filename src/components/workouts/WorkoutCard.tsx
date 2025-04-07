@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,20 +13,29 @@ interface WorkoutCardProps {
 }
 
 const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
-  const handleLike = () => {
+  const navigate = useNavigate();
+  
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
     toast.success("Thanks for your feedback! We'll improve your recommendations.");
   };
   
-  const handleDislike = () => {
+  const handleDislike = (e: React.MouseEvent) => {
+    e.stopPropagation();
     toast.success("We'll adjust your recommendations based on this feedback.");
   };
   
-  const handleShare = () => {
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
     toast.success("Share card generated! (would open share dialog)");
   };
   
+  const handleCardClick = () => {
+    navigate(`/workout/${workout.id}`);
+  };
+  
   return (
-    <Card className="workout-card mb-4 animate-fade-in">
+    <Card className="workout-card mb-4 animate-fade-in cursor-pointer" onClick={handleCardClick}>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <div>
@@ -51,12 +61,17 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({ workout }) => {
       <CardContent>
         <div className="text-gray-600 mb-3">{workout.description}</div>
         <div className="space-y-2">
-          {workout.exercises.map((exercise, index) => (
+          {workout.exercises.slice(0, 3).map((exercise, index) => (
             <div key={index} className="flex justify-between items-center p-2 rounded-md bg-gray-50">
               <span className="font-medium">{exercise.name}</span>
               <span className="text-gray-600">{exercise.sets} × {exercise.reps}</span>
             </div>
           ))}
+          {workout.exercises.length > 3 && (
+            <div className="text-sm text-gray-500 pt-1">
+              +{workout.exercises.length - 3} more exercises
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between pt-2">

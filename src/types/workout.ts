@@ -4,6 +4,7 @@ export interface Exercise {
   sets: number;
   reps: string; // could be "10" or "30 seconds"
   restTime?: number; // in seconds
+  instructions?: string[];
 }
 
 export interface WorkoutType {

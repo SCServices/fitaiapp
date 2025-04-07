@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Progress from "./pages/Progress";
 import Schedule from "./pages/Schedule";
 import Profile from "./pages/Profile";
+import WorkoutDetail from "./pages/WorkoutDetail";
+import WorkoutExecution from "./pages/WorkoutExecution";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/progress" element={<Progress />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/workout/:id" element={<WorkoutDetail />} />
+          <Route path="/workout-execution/:id" element={<WorkoutExecution />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
