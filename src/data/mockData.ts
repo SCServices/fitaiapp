@@ -1,3 +1,4 @@
+
 import { WorkoutType } from "@/types/workout";
 
 export const mockWorkouts: WorkoutType[] = [
@@ -142,13 +143,13 @@ export const mockWorkouts: WorkoutType[] = [
 ];
 
 export const mockActivityData = [
-  { date: "2023-04-01", count: 1 },
-  { date: "2023-04-02", count: 1 },
-  { date: "2023-04-03", count: 0 },
-  { date: "2023-04-04", count: 1 },
-  { date: "2023-04-05", count: 1 },
-  { date: "2023-04-06", count: 0 },
-  { date: "2023-04-07", count: 1 }
+  { date: "2023-04-01", count: 1, minutes: 30, intensity: 7 },
+  { date: "2023-04-02", count: 1, minutes: 45, intensity: 8 },
+  { date: "2023-04-03", count: 0, minutes: 0, intensity: 0 },
+  { date: "2023-04-04", count: 1, minutes: 25, intensity: 6 },
+  { date: "2023-04-05", count: 1, minutes: 60, intensity: 9 },
+  { date: "2023-04-06", count: 0, minutes: 0, intensity: 0 },
+  { date: "2023-04-07", count: 1, minutes: 35, intensity: 7 }
 ];
 
 export const mockUserStats = {

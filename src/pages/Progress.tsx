@@ -7,7 +7,7 @@ import ActivityChart from '@/components/progress/ActivityChart';
 import PerformanceMetrics from '@/components/progress/PerformanceMetrics';
 import AchievementBadges from '@/components/progress/AchievementBadges';
 import { mockActivityData, mockUserStats } from '@/data/mockData';
-import { Timer, CalendarDays, BarChartIcon } from 'lucide-react';
+import { Timer, CalendarDays, BarChartIcon, Flame } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
 
 const ProgressPage = () => {
