@@ -1,4 +1,3 @@
-
 import { WorkoutType } from "@/types/workout";
 
 export const mockWorkouts: WorkoutType[] = [
@@ -153,9 +152,47 @@ export const mockActivityData = [
 ];
 
 export const mockUserStats = {
-  currentStreak: 2,
-  bestStreak: 5,
+  currentStreak: 4,
+  bestStreak: 7,
   totalWorkouts: 12,
-  totalMinutes: 285,
-  completionRate: 85
+  totalMinutes: 360,
+  completionRate: 80,
+  caloriesBurned: 1240,
+  intensityChange: 8,
+  performanceTrend: [
+    { date: 'Week 1', intensity: 60 },
+    { date: 'Week 2', intensity: 65 },
+    { date: 'Week 3', intensity: 68 },
+    { date: 'Week 4', intensity: 72 },
+  ],
+  achievements: [
+    {
+      id: '1',
+      name: 'First Workout',
+      description: 'Complete your first workout',
+      icon: 'Award',
+      unlockedAt: '2024-04-01T12:00:00Z'
+    },
+    {
+      id: '2',
+      name: '3-Day Streak',
+      description: 'Work out for 3 days in a row',
+      icon: 'Flame',
+      unlockedAt: '2024-04-03T12:00:00Z'
+    },
+    {
+      id: '3',
+      name: '7-Day Streak',
+      description: 'Work out for 7 days in a row',
+      icon: 'Zap',
+      progress: 4
+    },
+    {
+      id: '4',
+      name: '10 Workouts',
+      description: 'Complete 10 total workouts',
+      icon: 'Calendar',
+      progress: 7
+    }
+  ]
 };

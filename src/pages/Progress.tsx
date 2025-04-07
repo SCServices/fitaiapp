@@ -4,10 +4,13 @@ import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StreakCounter from '@/components/progress/StreakCounter';
 import ActivityChart from '@/components/progress/ActivityChart';
+import PerformanceMetrics from '@/components/progress/PerformanceMetrics';
+import AchievementBadges from '@/components/progress/AchievementBadges';
 import { mockActivityData, mockUserStats } from '@/data/mockData';
 import { Timer, CalendarDays, BarChartIcon } from 'lucide-react';
+import { Progress } from "@/components/ui/progress";
 
-const Progress = () => {
+const ProgressPage = () => {
   return (
     <Layout>
       <div className="py-4">
@@ -56,21 +59,20 @@ const Progress = () => {
                 <BarChartIcon className="h-5 w-5 text-primary mr-2" />
                 <span className="text-2xl font-bold">{mockUserStats.completionRate}%</span>
               </div>
-              <div className="progress-bar">
-                <div 
-                  className="progress-bar-fill" 
-                  style={{ width: `${mockUserStats.completionRate}%` }}
-                ></div>
-              </div>
+              <Progress value={mockUserStats.completionRate} className="h-2 mb-2" />
               <p className="text-sm text-gray-500 mt-2">
                 You've completed {mockUserStats.completionRate}% of your planned workouts. Keep it up!
               </p>
             </CardContent>
           </Card>
+          
+          <PerformanceMetrics stats={mockUserStats} />
+          
+          <AchievementBadges achievements={mockUserStats.achievements} />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default Progress;
+export default ProgressPage;
