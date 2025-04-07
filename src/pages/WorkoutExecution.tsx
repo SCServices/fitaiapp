@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { CircleX, ChevronLeft, ChevronRight, Play, Pause, CheckCircle2 } from 'l
 import { toast } from "sonner";
 import { mockWorkouts } from '@/data/mockData';
 import { WorkoutType, Exercise } from '@/types/workout';
+import WorkoutFeedbackModal from '@/components/workouts/WorkoutFeedbackModal';
 
 const WorkoutExecution = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,12 +21,12 @@ const WorkoutExecution = () => {
   const [timer, setTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [workoutCompleted, setWorkoutCompleted] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const currentExercise = workout?.exercises[currentExerciseIndex];
   const progress = workout ? ((currentExerciseIndex + (isResting ? 0.5 : 0)) / workout.exercises.length) * 100 : 0;
   
-  // Setup timer
   useEffect(() => {
     if (isTimerRunning) {
       intervalRef.current = setInterval(() => {
@@ -43,7 +43,6 @@ const WorkoutExecution = () => {
     };
   }, [isTimerRunning]);
   
-  // Handle navigation if workout not found
   useEffect(() => {
     if (!workout) {
       toast.error("Workout not found");
@@ -70,7 +69,6 @@ const WorkoutExecution = () => {
       const nextExerciseIndex = currentExerciseIndex + 1;
       
       if (nextExerciseIndex < workout.exercises.length) {
-        // Check if there's a rest period between exercises
         const currentEx = workout.exercises[currentExerciseIndex];
         if (currentEx.restTime && currentEx.restTime > 0) {
           setIsResting(true);
@@ -78,7 +76,6 @@ const WorkoutExecution = () => {
           setCurrentExerciseIndex(nextExerciseIndex);
         }
       } else {
-        // Workout completed
         completeWorkout();
       }
     }
@@ -95,7 +92,6 @@ const WorkoutExecution = () => {
     setWorkoutCompleted(true);
     setIsTimerRunning(false);
     
-    // In a real app, save the workout completion to user's history
     const userData = JSON.parse(localStorage.getItem('fitai_user_stats') || '{}');
     const updatedStats = {
       ...userData,
@@ -103,17 +99,20 @@ const WorkoutExecution = () => {
       totalMinutes: (userData.totalMinutes || 0) + Math.round(timer / 60),
       currentStreak: (userData.currentStreak || 0) + 1,
       bestStreak: Math.max((userData.bestStreak || 0), (userData.currentStreak || 0) + 1),
-      completionRate: 100, // Simplified for demo
+      completionRate: 100,
       lastWorkoutDate: new Date().toISOString()
     };
     
     localStorage.setItem('fitai_user_stats', JSON.stringify(updatedStats));
     toast.success("Workout completed! Great job!");
+    
+    setTimeout(() => {
+      setShowFeedbackModal(true);
+    }, 1000);
   };
   
   const handleExit = () => {
     if (!workoutCompleted && timer > 30) {
-      // Ask for confirmation before exiting
       if (window.confirm("Are you sure you want to exit? Your progress will not be saved.")) {
         navigate('/');
       }
@@ -126,7 +125,6 @@ const WorkoutExecution = () => {
   
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Header */}
       <header className="bg-white p-4 border-b flex items-center justify-between">
         <Button variant="ghost" onClick={handleExit} size="sm">
           <CircleX className="h-5 w-5 text-gray-500" />
@@ -137,13 +135,11 @@ const WorkoutExecution = () => {
             {currentExerciseIndex + 1} of {workout.exercises.length} exercises
           </p>
         </div>
-        <div className="w-8"></div> {/* Empty div for flex alignment */}
+        <div className="w-8"></div>
       </header>
       
-      {/* Progress bar */}
       <Progress value={progress} className="h-1 rounded-none" />
       
-      {/* Main content */}
       <main className="flex-1 p-4 container mx-auto max-w-lg flex flex-col">
         {workoutCompleted ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center">
@@ -159,7 +155,6 @@ const WorkoutExecution = () => {
           </div>
         ) : (
           <>
-            {/* Timer */}
             <Card className="mb-6">
               <CardContent className="p-4 flex justify-between items-center">
                 <div>
@@ -181,7 +176,6 @@ const WorkoutExecution = () => {
               </CardContent>
             </Card>
             
-            {/* Current exercise */}
             <Card className="mb-6 flex-1 flex flex-col">
               <CardContent className="p-4 flex-1 flex flex-col">
                 {isResting ? (
@@ -202,7 +196,6 @@ const WorkoutExecution = () => {
                     </div>
                     
                     <div className="flex-1 flex flex-col items-center justify-center">
-                      {/* In a real app, we would show exercise images/videos here */}
                       <div className="w-64 h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
                         <p className="text-gray-500">Exercise demonstration</p>
                       </div>
@@ -221,7 +214,6 @@ const WorkoutExecution = () => {
         )}
       </main>
       
-      {/* Navigation buttons */}
       {!workoutCompleted && (
         <div className="p-4 bg-white border-t">
           <div className="container mx-auto max-w-lg flex justify-between">
@@ -252,6 +244,15 @@ const WorkoutExecution = () => {
             </Button>
           </div>
         </div>
+      )}
+      
+      {workout && (
+        <WorkoutFeedbackModal 
+          isOpen={showFeedbackModal}
+          onClose={() => setShowFeedbackModal(false)}
+          workoutId={workout.id}
+          workoutName={workout.name}
+        />
       )}
     </div>
   );

@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import WorkoutList from '@/components/workouts/WorkoutList';
+import RecommendedWorkouts from '@/components/workouts/RecommendedWorkouts';
 import { Button } from "@/components/ui/button";
 import { Sparkles } from 'lucide-react';
+import { toast } from "sonner";
 import { mockWorkouts } from '@/data/mockData';
 import { useNavigate } from 'react-router-dom';
 import OnboardingForm from '@/components/onboarding/OnboardingForm';
@@ -27,6 +29,7 @@ const Index = () => {
   const generateNewWorkout = () => {
     // In a real app, this would call the AI to generate a new workout
     // For now, we'll just display a success message
+    toast.success("New workout would be generated here with AI!");
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -67,6 +70,12 @@ const Index = () => {
             <Sparkles className="h-4 w-4" />
             Generate New
           </Button>
+        </div>
+        
+        <RecommendedWorkouts />
+        
+        <div className="mb-4 pb-2 border-b flex items-center">
+          <h3 className="text-lg font-medium">All Workouts</h3>
         </div>
         
         <WorkoutList workouts={mockWorkouts} />
